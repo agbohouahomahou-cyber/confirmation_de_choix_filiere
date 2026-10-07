@@ -1,0 +1,8 @@
+{% extends 'base.html' %}
+{% block content %}
+<main class="max-w-2xl mx-auto px-5 py-16">
+  <h1 class="text-3xl font-medium tracking-tight">Une déclaration existe déjà pour ce NPI.</h1>
+  <p class="text-una-mute mt-4">Chaque candidat ne peut déclarer son choix qu'une seule fois. Si vous pensez qu'il s'agit d'une erreur, contactez la scolarité de l'UNA.</p>
+  <a href="{% url 'confirmation:accueil' %}" class="inline-block mt-8 bg-una-dark text-white text-sm font-medium rounded-md px-6 py-3">Retour à l'accueil</a>
+</main>
+{% endblock %}

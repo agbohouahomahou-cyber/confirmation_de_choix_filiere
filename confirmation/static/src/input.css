@@ -1,0 +1,64 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+
+@layer base {
+  h1, h2 { font-family: theme("fontFamily.display"); }
+  :focus-visible { outline: 2px solid theme("colors.una.mid"); outline-offset: 3px; }
+}
+
+@layer components {
+  /* Cartes de choix (radio / case à cocher) */
+  .opt {
+    @apply flex items-center gap-3 rounded-lg border border-una-line bg-white px-4 py-3.5 cursor-pointer
+           transition-colors hover:border-una-mid
+           has-[:checked]:border-una-dark has-[:checked]:bg-una-band has-[:checked]:ring-1 has-[:checked]:ring-una-dark;
+  }
+  .opt input { @apply w-4 h-4 shrink-0 accent-una-dark; }
+
+  /* Champs du formulaire : aucun changement côté Python nécessaire */
+  #form :is(input, select, textarea):not([type=radio], [type=checkbox], [type=hidden]) {
+    @apply w-full rounded-lg border border-una-line bg-white px-4 py-3 text-base text-una-ink
+           placeholder:text-una-mute/60 transition-colors
+           focus:border-una-dark focus:outline-none focus:ring-2 focus:ring-una-mid/25;
+  }
+  #form :is(input, select, textarea)[aria-invalid=true] { @apply border-una-err; }
+
+  /* Liste déroulante : flèche personnalisée */
+  #form select {
+    @apply appearance-none pr-11 cursor-pointer;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20' fill='none' stroke='%235C685F' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M5 8l5 5 5-5'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 1rem center;
+    background-size: 1.1rem;
+  }
+
+  /* Zone de texte */
+  #form textarea { @apply min-h-[7rem] resize-y leading-relaxed; }
+
+  /* Date : même hauteur que les autres champs sur téléphone */
+  #form input[type=date] { @apply min-h-[3rem] appearance-none; }
+
+  /* Champ désactivé ou en lecture seule */
+  #form :is(input, select, textarea):is(:disabled, [readonly]) { @apply bg-una-band text-una-mute cursor-not-allowed; }
+
+  /* Saisies en chiffres (NPI, numéro de table, téléphone) : chiffres bien espacés */
+  #form input:is([inputmode=numeric], [inputmode=tel]) { font-variant-numeric: tabular-nums; letter-spacing: 0.04em; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  * { transition: none !important; }
+}
+
+/* Impression de la fiche : masque les éléments marqués .noprint */
+@media print {
+  .noprint { display: none !important; }
+}
+
+/* Fiche PDF : A4, uniquement la fiche, couleurs conservées */
+@page { size: A4; margin: 14mm; }
+@media print {
+  body { background: #fff !important; }
+  #fiche { -webkit-print-color-adjust: exact; print-color-adjust: exact; break-inside: avoid; }
+}

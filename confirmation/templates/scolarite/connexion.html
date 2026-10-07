@@ -1,0 +1,43 @@
+{% extends 'base.html' %}
+{% block head %}<meta name="robots" content="noindex, nofollow">{% endblock %}
+{% block title %}Espace scolarité – UNA{% endblock %}
+{% block content %}
+<main class="max-w-md mx-auto px-5 py-12 md:py-20">
+
+  <div class="text-center mb-8">
+    <span class="mx-auto grid place-items-center w-14 h-14 rounded-full bg-una-band text-una-dark" aria-hidden="true">
+      <svg class="w-6 h-6" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="9" width="12" height="8" rx="2"/><path d="M7 9V6a3 3 0 016 0v3"/></svg>
+    </span>
+    <h1 class="text-3xl md:text-4xl font-medium tracking-tight text-una-dark mt-5">Espace scolarité</h1>
+    <p class="text-sm text-una-mute mt-3">Accès réservé à la scolarité centrale.</p>
+  </div>
+
+  <form id="form" method="post" novalidate class="bg-white border border-una-line rounded-3xl p-6 md:p-8 shadow-[0_8px_30px_-12px_rgba(15,61,46,0.18)]">
+    {% csrf_token %}
+    <input type="hidden" name="next" value="{{ next }}">
+
+    {% if form.errors %}
+    <div class="text-sm text-una-err bg-una-err/5 border border-una-err/30 rounded-lg px-4 py-3 mb-6" role="alert">
+      Identifiant ou mot de passe incorrect.
+    </div>
+    {% endif %}
+
+    <div class="space-y-5">
+      <div>
+        <label class="block text-sm font-medium mb-2" for="{{ form.username.id_for_label }}">Identifiant</label>
+        {{ form.username }}
+      </div>
+      <div>
+        <label class="block text-sm font-medium mb-2" for="{{ form.password.id_for_label }}">Mot de passe</label>
+        {{ form.password }}
+      </div>
+    </div>
+
+    <button type="submit" class="w-full mt-8 font-medium px-7 py-3.5 rounded-lg bg-una-dark text-white shadow-sm hover:bg-una-mid transition-colors">Se connecter</button>
+  </form>
+
+  <p class="text-center text-sm text-una-mute mt-6">
+    Vous êtes candidat(e) ? <a href="{% url 'declaration:accueil' %}" class="text-una-dark font-medium underline underline-offset-4">Retour à l'accueil</a>
+  </p>
+</main>
+{% endblock %}

@@ -1,0 +1,70 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{% block title %}Espace scolarité{% endblock %} – UNA</title>
+  <link rel="icon" type="image/svg+xml" href="{% static 'img/logo-una.png' %}">
+  <link rel="stylesheet" href="{% static 'css/tailwind.css' %}">
+</head>
+<body class="bg-una-bg font-sans text-una-ink antialiased min-h-screen md:flex">
+{% with nom=request.resolver_match.url_name %}
+
+<!-- Barre latérale (ordinateur) -->
+<aside class="hidden md:flex md:flex-col w-64 shrink-0 bg-una-dark text-white h-screen sticky top-0">
+  <div class="flex items-center gap-3 px-6 h-20 border-b border-white/10">
+    <img src="{% static 'img/logo-una.png' %}" alt="" width="40" height="40" class="w-10 h-10 rounded-full object-cover">
+    <span class="leading-tight text-xs">Espace<br><strong class="font-semibold text-sm">Scolarité centrale</strong></span>
+  </div>
+
+  <nav class="flex-1 px-3 py-6 flex flex-col gap-1 text-sm" aria-label="Menu principal">
+    <a href="{% url 'scolarite:tableau_de_bord' %}"
+       class="rounded-md px-3 py-2.5 {% if nom == 'tableau_de_bord' %}bg-white/10 font-medium{% else %}text-white/70 hover:bg-white/5{% endif %}">Tableau de bord</a>
+    <a href="{% url 'scolarite:liste' %}"
+       class="rounded-md px-3 py-2.5 {% if nom == 'liste' %}bg-white/10 font-medium{% else %}text-white/70 hover:bg-white/5{% endif %}">Déclarations</a>
+    <a href="{% url 'scolarite:exports' %}"
+       class="rounded-md px-3 py-2.5 {% if nom == 'exports' %}bg-white/10 font-medium{% else %}text-white/70 hover:bg-white/5{% endif %}">Exports</a>
+  </nav>
+
+  <div class="px-6 py-5 border-t border-white/10 text-xs">
+    <p class="text-white/60">Connecté en tant que</p>
+    <p class="font-medium mt-0.5 mb-3">{{ request.user.get_username }}</p>
+    <form method="post" action="{% url 'scolarite:deconnexion' %}">
+      {% csrf_token %}
+      <button type="submit" class="underline underline-offset-4">Se déconnecter</button>
+    </form>
+  </div>
+</aside>
+
+<div class="flex-1 min-w-0">
+
+  <!-- Barre du haut (téléphone) -->
+  <header class="md:hidden bg-una-dark text-white">
+    <div class="px-5 h-16 flex items-center justify-between">
+      <span class="text-sm font-semibold">Scolarité centrale</span>
+      <button id="menu-btn" class="p-2 -mr-2" aria-label="Ouvrir le menu" aria-expanded="false" aria-controls="mobile-menu">
+        <svg id="icon-open" class="w-7 h-7" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" viewBox="0 0 24 24"><path d="M4 6h16M4 12h16M4 18h16" /></svg>
+        <svg id="icon-close" class="w-7 h-7 hidden" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" viewBox="0 0 24 24"><path d="M6 6l12 12M18 6L6 18" /></svg>
+      </button>
+    </div>
+    <div id="mobile-menu" class="hidden border-t border-white/10 px-5 py-4 flex flex-col text-sm">
+      <a href="{% url 'scolarite:tableau_de_bord' %}" class="py-3 font-medium">Tableau de bord</a>
+      <a href="{% url 'scolarite:liste' %}" class="py-3 {% if nom == 'liste' %}font-medium{% else %}text-white/70{% endif %}">Déclarations</a>
+      <a href="{% url 'scolarite:exports' %}" class="py-3 {% if nom == 'exports' %}font-medium{% else %}text-white/70{% endif %}">Exports</a>
+      <form method="post" action="{% url 'scolarite:deconnexion' %}" class="pt-3 mt-2 border-t border-white/10">
+        {% csrf_token %}
+        <button type="submit" class="py-2 underline underline-offset-4">Se déconnecter</button>
+      </form>
+    </div>
+  </header>
+
+  <main class="max-w-6xl mx-auto px-5 py-8 md:py-10">
+    {% block content %}{% endblock %}
+  </main>
+</div>
+
+{% endwith %}
+<script src="{% static 'js/app.js' %}"></script>
+</body>
+</html>

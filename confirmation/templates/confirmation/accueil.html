@@ -1,0 +1,139 @@
+{% extends 'base.html' %}
+{% block content %}
+{% load static %}
+<main>
+
+<!-- Hero -->
+<section class="max-w-6xl mx-auto px-5 py-12 md:py-20 grid md:grid-cols-[1.1fr_0.9fr] gap-10 md:gap-14 items-center">
+  <div>
+    <p class="inline-flex items-center gap-2 text-xs bg-una-band border border-una-line rounded-full px-3.5 py-1.5 mb-6 md:mb-8">
+      <span class="w-1.5 h-1.5 rounded-full bg-una-mid" aria-hidden="true"></span>
+      Confirmation de choix, rentrée {{ annee_academique }}
+    </p>
+
+    <h1 class="text-3xl sm:text-5xl md:text-6xl font-medium leading-[1.05] tracking-tight text-una-dark text-balance">
+      Confirmez votre place à l'Université Nationale d'Agriculture.
+    </h1>
+
+    <p class="mt-6 md:mt-8 text-lg text-una-mute max-w-md leading-relaxed">
+      Vous avez été selectioné(e) à l'UNA. Quelques étapes suffisent, depuis votre téléphone ou votre ordinateur.
+    </p>
+
+    <div class="mt-9 flex flex-col sm:flex-row sm:items-center gap-4">
+      <a href="{% url 'declaration:declarer' %}"
+         class="bg-una-dark text-white font-medium rounded-lg px-7 py-4 text-center shadow-sm hover:bg-una-mid transition-colors">
+        Commencer ma confirmation
+      </a>
+      <span class="text-sm text-una-mute text-center sm:text-left">Environ 5 minutes</span>
+    </div>
+  </div>
+
+  <!-- Carte image -->
+  <div class="relative overflow-hidden rounded-3xl bg-una-dark min-h-[380px] md:min-h-[520px] flex flex-col justify-end p-6 text-white">
+    <img src="{% static 'img/terrain1.jpg' %}" alt="" class="absolute inset-0 w-full h-full object-cover">
+    <div class="absolute inset-0 bg-gradient-to-t from-una-dark/95 via-una-dark/35 to-transparent"></div>
+
+    <span class="absolute top-5 left-5 bg-white/95 text-una-dark text-xs font-medium rounded-full px-3.5 py-1.5">Votre place vous attend</span>
+
+    <div class="relative">
+      <p class="font-display text-2xl sm:text-3xl leading-snug mb-6 text-balance">
+        Des savoirs qui prennent racine. Des ambitions qui portent leurs fruits.
+      </p>
+      <a href="{% url 'declaration:accueil' %}#ecoles"
+         class="group bg-white text-una-ink rounded-xl p-4 flex justify-between items-center gap-4 hover:bg-una-band transition-colors">
+        <span>
+          <strong class="block text-sm font-semibold">9 écoles, un même avenir</strong>
+          <span class="text-xs text-una-mute">Votre passion, votre parcours</span>
+        </span>
+        <span aria-hidden="true" class="grid place-items-center w-9 h-9 rounded-full bg-una-dark text-white group-hover:bg-una-mid transition-colors">↗</span>
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- Réassurance -->
+<section class="max-w-6xl mx-auto px-5">
+  <ul class="grid grid-cols-2 md:grid-cols-4 gap-y-6 border-y border-una-line py-7 text-sm md:divide-x md:divide-una-line">
+    <li class="md:px-6 first:md:pl-0"><strong class="block font-semibold text-una-dark">Données protégées</strong><span class="text-una-mute text-xs">Brouillon limité à votre session</span></li>
+    <li class="md:px-6"><strong class="block font-semibold text-una-dark">100 % en ligne</strong><span class="text-una-mute text-xs">Aucun déplacement nécessaire</span></li>
+    <li class="md:px-6"><strong class="block font-semibold text-una-dark">Sans compte, sans paiement</strong><span class="text-una-mute text-xs">Vous commencez tout de suite</span></li>
+    <li class="md:px-6"><strong class="block font-semibold text-una-dark">Fiche à télécharger</strong><span class="text-una-mute text-xs">Un récapitulatif à conserver</span></li>
+  </ul>
+</section>
+
+<!-- Parcours -->
+<section class="max-w-6xl mx-auto px-5 py-16 md:py-24">
+  <div class="max-w-xl mb-12">
+    <h2 class="text-3xl md:text-4xl font-medium tracking-tight text-una-dark text-balance">Votre prochaine étape, en trois temps.</h2>
+    <p class="text-una-mute mt-4">Vous avancez à votre rythme, nous vous guidons à chaque étape.</p>
+  </div>
+
+  <ol class="grid md:grid-cols-3 gap-10 md:gap-8 relative">
+    <!-- trait de liaison (ordinateur) -->
+    <span class="hidden md:block absolute top-6 left-6 right-6 h-px bg-una-line" aria-hidden="true"></span>
+
+    <li class="relative">
+      <span class="relative grid place-items-center w-12 h-12 rounded-full bg-una-dark text-white font-display text-xl">1</span>
+      <h3 class="mt-6 font-semibold text-lg">Présentez-vous</h3>
+      <p class="text-una-mute mt-2 max-w-xs">Renseignez votre identité, vos coordonnées et votre filiation.</p>
+    </li>
+    <li class="relative">
+      <span class="relative grid place-items-center w-12 h-12 rounded-full bg-una-dark text-white font-display text-xl">2</span>
+      <h3 class="mt-6 font-semibold text-lg">Choisissez votre voie</h3>
+      <p class="text-una-mute mt-2 max-w-xs">Sélectionnez votre école et précisez votre mode de financement.</p>
+    </li>
+    <li class="relative">
+      <span class="relative grid place-items-center w-12 h-12 rounded-full bg-una-dark text-white font-display text-xl">3</span>
+      <h3 class="mt-6 font-semibold text-lg">Confirmez</h3>
+      <p class="text-una-mute mt-2 max-w-xs">Relisez votre déclaration, validez et téléchargez votre fiche PDF.</p>
+    </li>
+  </ol>
+
+  <p class="mt-12 text-sm text-una-mute border-l-2 border-una-mid pl-4 max-w-2xl">
+    <strong class="font-semibold text-una-ink">Votre brouillon reste dans cet onglet.</strong>
+    Terminez votre déclaration avant de le fermer.
+  </p>
+</section>
+
+<!-- Écoles -->
+<section id="ecoles" class="bg-una-band py-16 md:py-24 scroll-mt-16">
+  <div class="max-w-6xl mx-auto px-5">
+    <div class="flex flex-wrap justify-between items-end gap-4 mb-10">
+      <div class="max-w-xl">
+        <h2 class="text-3xl md:text-4xl font-medium tracking-tight text-una-dark text-balance">Trouvez l'école qui vous ressemble.</h2>
+        <p class="text-una-mute mt-4">Du végétal à l'agrobusiness, bâtissez votre avenir dans un domaine qui vous passionne.</p>
+      </div>
+    </div>
+
+    <ul class="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
+      {% comment %}Même structure répétée pour les 9 écoles{% endcomment %}
+      <li class="bg-white border border-una-line rounded-xl p-5 flex gap-4 items-start hover:border-una-mid transition-colors"><span class="shrink-0 rounded-md bg-una-dark text-white text-xs font-semibold px-2.5 py-1.5 min-w-[4.5rem] text-center">EGPVS</span><p class="text-sm text-una-mute leading-snug">Gestion et production végétale et semencière</p></li>
+      <li class="bg-white border border-una-line rounded-xl p-5 flex gap-4 items-start hover:border-una-mid transition-colors"><span class="shrink-0 rounded-md bg-una-dark text-white text-xs font-semibold px-2.5 py-1.5 min-w-[4.5rem] text-center">EHAEV</span><p class="text-sm text-una-mute leading-snug">Horticulture et aménagement des espaces verts </p></li>
+      <li class="bg-white border border-una-line rounded-xl p-5 flex gap-4 items-start hover:border-una-mid transition-colors"><span class="shrink-0 rounded-md bg-una-dark text-white text-xs font-semibold px-2.5 py-1.5 min-w-[4.5rem] text-center">EForT</span><p class="text-sm text-una-mute leading-snug">Foresterie tropicale</p></li>
+      <li class="bg-white border border-una-line rounded-xl p-5 flex gap-4 items-start hover:border-una-mid transition-colors"><span class="shrink-0 rounded-md bg-una-dark text-white text-xs font-semibold px-2.5 py-1.5 min-w-[4.5rem] text-center">EGESE</span><p class="text-sm text-una-mute leading-snug">Gestion et exploitation des systèmes d'élevage</p></li>
+      <li class="bg-white border border-una-line rounded-xl p-5 flex gap-4 items-start hover:border-una-mid transition-colors"><span class="shrink-0 rounded-md bg-una-dark text-white text-xs font-semibold px-2.5 py-1.5 min-w-[4.5rem] text-center">EAq</span><p class="text-sm text-una-mute leading-snug">Aquaculture</p></li>
+      <li class="bg-white border border-una-line rounded-xl p-5 flex gap-4 items-start hover:border-una-mid transition-colors"><span class="shrink-0 rounded-md bg-una-dark text-white text-xs font-semibold px-2.5 py-1.5 min-w-[4.5rem] text-center">EGR</span><p class="text-sm text-una-mute leading-snug">Génie rural</p></li>
+      <li class="bg-white border border-una-line rounded-xl p-5 flex gap-4 items-start hover:border-una-mid transition-colors"><span class="shrink-0 rounded-md bg-una-dark text-white text-xs font-semibold px-2.5 py-1.5 min-w-[4.5rem] text-center">ESTCTPA</span><p class="text-sm text-una-mute leading-snug">Sciences et techniques de conservation et de transformation des produits agricoles</p></li>
+      <li class="bg-white border border-una-line rounded-xl p-5 flex gap-4 items-start hover:border-una-mid transition-colors"><span class="shrink-0 rounded-md bg-una-dark text-white text-xs font-semibold px-2.5 py-1.5 min-w-[4.5rem] text-center">EAPA</span><p class="text-sm text-una-mute leading-snug">Agrobusiness et politiques agricoles</p></li>
+      <li class="bg-white border border-una-line rounded-xl p-5 flex gap-4 items-start hover:border-una-mid transition-colors"><span class="shrink-0 rounded-md bg-una-dark text-white text-xs font-semibold px-2.5 py-1.5 min-w-[4.5rem] text-center">ESRVA</span><p class="text-sm text-una-mute leading-snug">Sociologie rurale et vulgarisation agricole</p></li>
+    </ul>
+    <p class="text-sm text-una-mute mt-8">
+  </div>
+</section>
+
+<!-- Appel à l'action final -->
+<section id="formulaire" class="max-w-6xl mx-auto px-5 py-16 md:py-24">
+  <div class="bg-una-dark text-white rounded-3xl px-8 py-12 md:px-14 md:py-16 flex flex-wrap items-center justify-between gap-8">
+    <div class="max-w-lg">
+      <h2 class="text-3xl md:text-4xl font-medium tracking-tight text-balance">Et si votre avenir commençait aujourd'hui ?</h2>
+      <p class="mt-4 text-white/75">Quelques minutes pour donner une direction à vos ambitions.</p>
+    </div>
+    <a href="{% url 'declaration:declarer' %}"
+       class="bg-una-sun text-una-dark font-semibold rounded-lg px-8 py-4 hover:brightness-95 transition">
+      Commencer ma confirmation
+    </a>
+  </div>
+</section>
+
+</main>
+{% endblock %}

@@ -1,0 +1,94 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="fr" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#0F3D2E">
+  {% block head %}{% endblock %}
+  <title>{% block title %}UNA - Confirmation de place{% endblock %}</title>
+  <link rel="icon" type="image/png" href="{% static 'img/logo-una.png' %}">
+  <link rel="stylesheet" href="{% static 'css/tailwind.css' %}">
+</head>
+<body class="bg-una-bg font-sans text-una-ink antialiased min-h-screen flex flex-col">
+
+<a href="#contenu" class="noprint sr-only focus:not-sr-only focus:absolute focus:top-2 focus:left-2 focus:z-50 bg-white text-una-dark rounded-md px-4 py-2">Aller au contenu</a>
+
+<!-- Bandeau -->
+<div class="noprint bg-una-dark text-white/80 text-xs">
+  <div class="max-w-6xl mx-auto px-5 py-2 flex justify-between gap-4">
+    <span>Université Nationale d'Agriculture</span>
+    <span class="hidden sm:inline">Plateforme de confirmation</span>
+  </div>
+</div>
+
+<!-- En-tête -->
+<header class="noprint sticky top-0 z-40 bg-una-bg/90 backdrop-blur border-b border-una-line">
+  <div class="max-w-6xl mx-auto px-5 h-16 sm:h-20 flex items-center justify-between gap-3">
+
+    <a href="{% url 'declaration:accueil' %}" class="flex items-center gap-3">
+      <img src="{% static 'img/logo-una.png' %}"
+           alt="Logo de l'Université Nationale d'Agriculture"
+           width="48" height="48"
+           class="w-10 h-10 sm:w-12 sm:h-12 object-contain">
+      <span class="leading-tight text-xs sm:text-sm text-una-mute">Université Nationale<br><strong class="font-display font-semibold text-base sm:text-lg text-una-dark">d'Agriculture</strong></span>
+    </a>
+
+    <!-- Menu ordinateur -->
+    <nav class="hidden md:flex gap-8 text-sm" aria-label="Navigation principale">
+      <a href="{% url 'declaration:accueil' %}"
+         class="pb-1 border-b-2 {% if request.resolver_match.url_name == 'accueil' %}border-una-mid text-una-dark font-medium{% else %}border-transparent text-una-mute hover:text-una-dark{% endif %}">Accueil</a>
+      <a href="{% url 'declaration:accueil' %}#ecoles" class="pb-1 border-b-2 border-transparent text-una-mute hover:text-una-dark">Nos écoles</a>
+      <a href="{% url 'scolarite:connexion' %}" class="pb-1 pl-8 border-l border-una-line flex items-center gap-1.5 border-b-2 border-b-transparent text-una-mute hover:text-una-dark"><svg class="w-4 h-4" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="4" y="9" width="12" height="8" rx="2"/><path d="M7 9V6a3 3 0 016 0v3"/></svg>Espace scolarité</a>
+    </nav>
+
+    <a href="{% url 'declaration:declarer' %}" class="hidden md:inline-block bg-una-dark text-white text-sm font-medium rounded-lg px-5 py-2.5 hover:bg-una-mid transition-colors">Commencer ma confirmation</a>
+
+    <!-- Hamburger (téléphone) : ids conservés pour app.js -->
+    <button id="menu-btn" class="md:hidden grid place-items-center w-11 h-11 -mr-2 text-una-dark" aria-label="Ouvrir le menu" aria-expanded="false" aria-controls="mobile-menu">
+      <svg id="icon-open" class="w-7 h-7" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" viewBox="0 0 24 24"><path d="M4 6h16M4 12h16M4 18h16" /></svg>
+      <svg id="icon-close" class="w-7 h-7 hidden" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" viewBox="0 0 24 24"><path d="M6 6l12 12M18 6L6 18" /></svg>
+    </button>
+  </div>
+
+  <!-- Menu déroulant (téléphone) -->
+  <div id="mobile-menu" class="hidden md:hidden border-t border-una-line bg-una-bg">
+    <div class="max-w-6xl mx-auto px-5 py-4 flex flex-col text-base divide-y divide-una-line">
+      <a href="{% url 'declaration:accueil' %}" class="py-3.5 font-medium text-una-dark">Accueil</a>
+      <a href="{% url 'declaration:accueil' %}#ecoles" class="py-3.5 text-una-mute">Nos écoles</a>
+    </div>
+    <div class="max-w-6xl mx-auto px-5 pb-5">
+      <a href="{% url 'declaration:declarer' %}" class="block bg-una-dark text-white text-center font-medium rounded-lg px-5 py-3.5">Commencer ma confirmation</a>
+      <a href="{% url 'scolarite:connexion' %}" class="mt-4 flex items-center justify-center gap-1.5 text-sm text-una-mute py-2"><svg class="w-4 h-4" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="4" y="9" width="12" height="8" rx="2"/><path d="M7 9V6a3 3 0 016 0v3"/></svg>Espace scolarité</a>
+    </div>
+  </div>
+</header>
+
+<div id="contenu" class="flex-1">
+{% block content %}{% endblock %}
+</div>
+
+<!-- Pied de page -->
+<footer class="noprint bg-una-dark text-white/80 text-sm">
+  <div class="max-w-6xl mx-auto px-5 py-10 grid sm:grid-cols-[1.4fr_1fr_1fr] gap-8">
+    <div>
+      <p class="font-display text-xl text-white">Université Nationale d'Agriculture</p>
+      <p class="mt-2 text-white/60 max-w-xs">La terre d'un avenir meilleur.</p>
+    </div>
+    <ul class="space-y-2">
+      <li><a href="{% url 'declaration:accueil' %}#ecoles" class="hover:text-white">Nos écoles</a></li>
+      <li><a href="{% url 'scolarite:connexion' %}" class="hover:text-white">Espace scolarité</a></li>
+    </ul>
+    <ul class="space-y-2">
+      <li><a href="#" class="hover:text-white">Confidentialité</a></li>
+      <li><a href="#" class="hover:text-white">Nous contacter</a></li>
+    </ul>
+  </div>
+  <div class="border-t border-white/10">
+    <p class="max-w-6xl mx-auto px-5 py-4 text-xs text-white/50">&copy; {% now "Y" %} UNA. Tous droits réservés.</p>
+  </div>
+</footer>
+
+<script src="{% static 'js/app.js' %}"></script>
+</body>
+</html>

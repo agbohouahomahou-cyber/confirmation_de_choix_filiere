@@ -1,0 +1,78 @@
+{% extends 'base.html' %}
+{% load static qr %}
+{% block title %}Ma fiche – {{ c.nom }}{% endblock %}
+{% block content %}
+<main class="max-w-3xl mx-auto px-5 py-10 print:max-w-none print:p-0">
+
+  <!-- Message de succès : absent du PDF -->
+  <div class="noprint flex items-start gap-4 mb-8">
+    <span class="grid place-items-center w-12 h-12 shrink-0 rounded-full bg-una-mid text-white" aria-hidden="true">
+      <svg class="w-6 h-6" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M4 10.5l4 4 8-9"/></svg>
+    </span>
+    <div>
+      <h1 class="text-3xl md:text-4xl font-medium tracking-tight text-una-dark">Votre déclaration est enregistrée.</h1>
+      <p class="text-una-mute mt-2">Téléchargez votre fiche et conservez-la.</p>
+    </div>
+  </div>
+
+  <!-- La fiche : seule partie imprimée -->
+  <article id="fiche" class="bg-white border border-una-line rounded-3xl overflow-hidden shadow-[0_8px_30px_-12px_rgba(15,61,46,0.18)] print:shadow-none print:rounded-none print:border-0">
+
+    <header class="px-6 md:px-10 pt-8 pb-6 flex items-center gap-5 border-b border-una-line">
+      <img src="{% static 'img/logo-una.png' %}" 
+           alt="Logo de l'Université Nationale d'Agriculture"
+          class="w-16 h-16 md:w-20 md:h-20 shrink-0 object-contain">
+      <div class="leading-tight">
+        <p class="text-xs text-una-mute">Université Nationale d'Agriculture</p>
+        <p class="font-display text-xl md:text-2xl text-una-ink mt-1">Fiche de confirmation de choix</p>
+        <p class="text-xs text-una-mute mt-1">Rentrée {{ annee_academique }}</p>
+      </div>
+    </header>
+
+    <div class="px-6 md:px-10 py-8 space-y-8">
+
+      <div>
+        <p class="font-display text-2xl md:text-3xl text-una-dark">{{ c.nom }} {{ c.prenoms }}</p>
+        <p class="text-sm text-una-mute mt-1">NPI {{ c.npi }}</p>
+      </div>
+
+      <!-- Le choix, mis en avant -->
+      <div class="grid sm:grid-cols-3 gap-px bg-una-line border border-una-line rounded-xl overflow-hidden">
+        <div class="bg-una-band p-4"><p class="text-xs text-una-mute">Décision</p><p class="font-semibold text-una-dark mt-1">{{ c.get_decision_display }}</p></div>
+        <div class="bg-una-band p-4"><p class="text-xs text-una-mute">École</p><p class="font-semibold text-una-dark mt-1">{{ c.get_ecole_display }}</p></div>
+        <div class="bg-una-band p-4"><p class="text-xs text-una-mute">Financement</p><p class="font-semibold text-una-dark mt-1">{{ c.get_financement_display }}</p></div>
+      </div>
+
+      <section>
+        <h2 class="font-sans text-sm font-semibold text-una-dark mb-3 pb-2 border-b border-una-line">Le candidat</h2>
+        <dl class="grid grid-cols-1 sm:grid-cols-[10rem_1fr] gap-x-6 gap-y-2 text-sm">
+          <dt class="text-una-mute">N° de table du BAC</dt><dd class="font-medium">{{ c.numero_table }}</dd>
+          <dt class="text-una-mute">Né(e) le</dt><dd class="font-medium">{{ c.date_naissance|date:"d/m/Y" }} à {{ c.lieu_naissance }}</dd>
+          <dt class="text-una-mute">Téléphone</dt><dd class="font-medium">{{ c.telephone }}</dd>
+          <dt class="text-una-mute">Soumise le</dt><dd class="font-medium">{{ c.cree_le|date:"d/m/Y à H:i" }}</dd>
+        </dl>
+      </section>
+
+      <!-- Vérification : code + vrai QR code -->
+      <section class="flex items-center gap-6 rounded-xl border border-una-line p-5 break-inside-avoid">
+        <div class="w-28 h-28 shrink-0 [&>svg]:w-full [&>svg]:h-full">{% qr_svg lien_verification scale=6 %}</div>
+        <div class="min-w-0">
+          <p class="text-xs text-una-mute">Code de vérification</p>
+          <p class="font-display text-2xl tracking-widest text-una-dark mt-1">{{ c.code_verification }}</p>
+          <p class="text-xs text-una-mute mt-3">Scannez le QR code ou ouvrez le lien pour vérifier l'authenticité de cette fiche.</p>
+          <p class="text-xs text-una-mute mt-1 break-all">{{ lien_verification }}</p>
+        </div>
+      </section>
+    </div>
+  </article>
+
+  <!-- Actions : absentes du PDF -->
+  <div class="noprint mt-8">
+    <div class="flex flex-wrap gap-3">
+      <a href="{% url 'declaration:telecharger_fiche' %}" class="inline-block bg-una-dark text-white font-medium rounded-lg px-7 py-3.5 shadow-sm hover:bg-una-mid transition-colors">Télécharger ma fiche (PDF)</a>
+      {# Remplacez # par le lien du groupe WhatsApp de la promotion #}
+      <a href="https://chat.whatsapp.com/EvlsjW6ZCPq5l7XRW3Cd7L" class="border border-una-line bg-white font-medium rounded-lg px-7 py-3.5 hover:bg-una-band transition-colors">Rejoindre le groupe WhatsApp de la promotion</a>
+    </div>
+  </div>
+</main>
+{% endblock %}

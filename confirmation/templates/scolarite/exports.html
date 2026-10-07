@@ -1,0 +1,24 @@
+{% extends 'scolarite/base_chef.html' %}
+{% block title %}Exports{% endblock %}
+{% block content %}
+
+<div class="mb-8">
+  <p class="text-xs text-una-mute mb-3">Confirmation de choix &nbsp;|&nbsp; {{ annee_academique }} </p>
+  <h1 class="text-3xl md:text-4xl font-medium tracking-tight">Exports</h1>
+  <p class="text-sm text-una-mute mt-3 max-w-xl">Téléchargez les déclarations au format de votre choix. Sans filtre, toutes les déclarations sont exportées.</p>
+</div>
+
+<form method="get" class="bg-white border border-una-line rounded-lg p-5 md:p-6 max-w-3xl">
+  <h2 class="font-medium text-lg mb-5">Que souhaitez-vous exporter ?</h2>
+  {% include 'scolarite/_champs_filtres.html' %}
+
+  <div class="flex flex-wrap items-center gap-3 mt-6">
+    <button type="submit" formaction="{% url 'scolarite:export_excel' %}" class="bg-una-dark text-white text-sm font-medium rounded-md px-6 py-3">Télécharger en Excel</button>
+    <button type="submit" formaction="{% url 'scolarite:export_pdf' %}" class="text-sm font-medium px-6 py-3 rounded-md border border-una-line">Télécharger en PDF</button>
+    <button type="submit" formaction="{% url 'scolarite:export_csv' %}" class="text-sm font-medium px-6 py-3 rounded-md border border-una-line">Télécharger en CSV</button>
+    {% if filtres_actifs %}<a href="{% url 'scolarite:exports' %}" class="text-sm underline underline-offset-4 text-una-mute">Réinitialiser</a>{% endif %}
+  </div>
+  <p class="text-xs text-una-mute mt-5">Le fichier Excel et le CSV contiennent toutes les informations du candidat. Le PDF est une liste imprimable.</p>
+</form>
+
+{% endblock %}

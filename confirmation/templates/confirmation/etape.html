@@ -1,0 +1,87 @@
+{% extends 'base.html' %}
+{% block title %}{{ titre }} – Confirmation de place{% endblock %}
+{% block content %}
+<main class="max-w-2xl mx-auto px-5 py-8 md:py-12">
+  <h1 class="text-3xl md:text-4xl font-medium tracking-tight text-una-dark mb-8 text-balance">Un premier pas vers votre avenir.</h1>
+
+  <!-- Indicateur d'étapes -->
+  <ol class="flex items-center mb-8 overflow-x-auto pb-1" aria-label="Étapes">
+    {% for step in wizard.steps.all %}
+    <li class="flex items-center {% if not forloop.last %}flex-1{% endif %}">
+      <span {% if forloop.counter0 == wizard.steps.step0 %}aria-current="step"{% endif %}
+        class="w-10 h-10 shrink-0 rounded-full text-sm font-medium grid place-items-center border-2 transition-colors
+        {% if forloop.counter0 == wizard.steps.step0 %}bg-una-dark text-white border-una-dark ring-4 ring-una-mid/20
+        {% elif forloop.counter0 < wizard.steps.step0 %}bg-una-mid text-white border-una-mid
+        {% else %}bg-white border-una-line text-una-mute{% endif %}">
+        {% if forloop.counter0 < wizard.steps.step0 %}<svg class="w-4 h-4" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 10.5l4 4 8-9"/></svg><span class="sr-only">{{ forloop.counter }}</span>{% else %}{{ forloop.counter }}{% endif %}
+      </span>
+      <span class="h-0.5 flex-1 mx-1.5 rounded-full {% if forloop.counter0 < wizard.steps.step0 %}bg-una-mid{% else %}bg-una-line{% endif %}" aria-hidden="true"></span>
+    </li>
+    {% endfor %}
+    <li class="shrink-0"><span class="w-10 h-10 rounded-full text-sm font-medium grid place-items-center border-2 border-una-line bg-white text-una-mute">{{ total }}</span></li>
+  </ol>
+
+  <form id="form" method="post" novalidate class="bg-white border border-una-line rounded-3xl p-6 md:p-10 shadow-[0_8px_30px_-12px_rgba(15,61,46,0.18)]">
+    {% csrf_token %}
+    {{ wizard.management_form }}
+
+    <div class="flex justify-between text-sm text-una-mute">
+      <span class="font-medium text-una-dark">Étape {{ numero }} sur {{ total }}</span>
+      <span>{{ pourcentage }} % complété</span>
+    </div>
+    <div class="h-2 bg-una-band rounded-full mt-3 mb-8 overflow-hidden" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="{{ pourcentage }}">
+      <div class="h-full bg-una-mid rounded-full transition-[width] duration-500" style="width: calc({{ numero }} / {{ total }} * 100%)"></div>
+    </div>
+
+    <h2 class="text-2xl md:text-3xl font-medium tracking-tight text-una-dark mb-8">{{ titre }}</h2>
+
+    {% if form.non_field_errors %}
+    <div class="text-sm text-una-err bg-una-err/5 border border-una-err/30 rounded-lg px-4 py-3 mb-6" role="alert">{{ form.non_field_errors }}</div>
+    {% endif %}
+
+    {% if wizard.steps.current == 'relecture' %}
+    <div class="space-y-4 mb-8">
+      {% for bloc, lignes in recap %}
+      <section class="rounded-xl bg-una-bg border border-una-line p-5">
+        <h3 class="font-semibold text-una-dark mb-4">{{ bloc }}</h3>
+        <dl class="grid grid-cols-1 sm:grid-cols-[auto_1fr] gap-x-6 gap-y-2 text-sm">
+          {% for label, valeur in lignes %}{% if valeur %}<dt class="text-una-mute sm:py-1">{{ label }}</dt><dd class="font-medium mb-2 sm:mb-0 sm:py-1">{{ valeur }}</dd>{% endif %}{% endfor %}
+        </dl>
+      </section>
+      {% endfor %}
+    </div>
+    {% endif %}
+
+    <div class="space-y-6">
+      {% for field in form %}
+      <div>
+        {% if field.field.widget.input_type == 'radio' %}
+          <fieldset>
+            <legend class="block text-sm font-medium mb-3">{{ field.label }} <span class="text-una-mid" aria-hidden="true">*</span></legend>
+            <div class="grid gap-3">
+              {% for radio in field %}<label class="opt">{{ radio.tag }}<span class="text-sm">{{ radio.choice_label }}</span></label>{% endfor %}
+            </div>
+          </fieldset>
+        {% elif field.field.widget.input_type == 'checkbox' %}
+          <label class="opt">{{ field }}<span class="text-sm">{{ field.label }}</span></label>
+        {% else %}
+          <label class="block text-sm font-medium mb-2" for="{{ field.id_for_label }}">{{ field.label }}{% if field.field.required %} <span class="text-una-mid" aria-hidden="true">*</span>{% endif %}</label>
+          {{ field }}
+        {% endif %}
+        {% if field.help_text %}<p class="text-xs text-una-mute mt-2">{{ field.help_text }}</p>{% endif %}
+        {% for error in field.errors %}<p class="text-sm text-una-err mt-2">{{ error }}</p>{% endfor %}
+      </div>
+      {% endfor %}
+    </div>
+
+    <div class="flex justify-between items-center gap-3 mt-10 pt-6 border-t border-una-line">
+      {% if wizard.steps.prev %}
+      <button type="submit" name="wizard_goto_step" value="{{ wizard.steps.prev }}" formnovalidate
+        class="font-medium px-6 py-3 rounded-lg border border-una-line hover:bg-una-band transition-colors">Retour</button>
+      {% else %}<span></span>{% endif %}
+      <button type="submit" class="font-medium px-7 py-3 rounded-lg bg-una-dark text-white shadow-sm hover:bg-una-mid transition-colors">
+        {% if wizard.steps.current == 'relecture' %}Confirmer ma déclaration{% else %}Continuer{% endif %}</button>
+    </div>
+  </form>
+</main>
+{% endblock %}

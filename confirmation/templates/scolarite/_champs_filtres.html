@@ -1,0 +1,28 @@
+<div class="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+  <div class="sm:col-span-2 lg:col-span-4">
+    <label for="q" class="block text-xs font-medium mb-2">Recherche</label>
+    <input type="search" id="q" name="q" value="{{ filtres.q }}" placeholder="Nom, prénoms, NPI, n° de table ou téléphone"
+           class="w-full rounded-md border border-una-line px-4 py-3 text-sm focus:outline-none focus:border-una-mid">
+  </div>
+  <div>
+    <label for="ecole" class="block text-xs font-medium mb-2">École</label>
+    <select id="ecole" name="ecole" class="w-full rounded-md border border-una-line bg-white px-3 py-3 text-sm focus:outline-none focus:border-una-mid">
+      <option value="">Toutes les écoles</option>
+      {% for code, libelle in ecoles %}<option value="{{ code }}" {% if filtres.ecole == code %}selected{% endif %}>{{ libelle }}</option>{% endfor %}
+    </select>
+  </div>
+  <div>
+    <label for="decision" class="block text-xs font-medium mb-2">Décision</label>
+    <select id="decision" name="decision" class="w-full rounded-md border border-una-line bg-white px-3 py-3 text-sm focus:outline-none focus:border-una-mid">
+      <option value="">Toutes</option>
+      {% for code, libelle in decisions %}<option value="{{ code }}" {% if filtres.decision == code %}selected{% endif %}>{{ libelle }}</option>{% endfor %}
+    </select>
+  </div>
+  <div class="sm:col-span-2">
+    <label for="financement" class="block text-xs font-medium mb-2">Financement</label>
+    <select id="financement" name="financement" class="w-full rounded-md border border-una-line bg-white px-3 py-3 text-sm focus:outline-none focus:border-una-mid">
+      <option value="">Tous les financements</option>
+      {% for code, libelle in financements %}<option value="{{ code }}" {% if filtres.financement == code %}selected{% endif %}>{{ libelle }}</option>{% endfor %}
+    </select>
+  </div>
+</div>

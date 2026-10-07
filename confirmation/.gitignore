@@ -1,0 +1,11 @@
+#Environment
+.env
+env/
+.venv/
+
+#Django
+*.sqlite3
+/staticfiles/
+
+#Logs
+.logs

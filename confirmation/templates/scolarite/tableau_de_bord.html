@@ -1,0 +1,121 @@
+{% extends 'scolarite/base_chef.html' %}
+{% block title %}Tableau de bord{% endblock %}
+{% block content %}
+
+<!-- Titre + exports -->
+<div class="flex flex-wrap items-end justify-between gap-4 mb-8">
+  <div>
+    <p class="text-xs text-una-mute mb-3">Confirmation de choix &nbsp;|&nbsp; {{ annee_academique }} </p>
+    <h1 class="text-3xl md:text-4xl font-medium tracking-tight">Tableau de bord</h1>
+  </div>
+  <div class="flex flex-wrap items-center gap-3 text-sm">
+    <span class="text-xs text-una-mute">Exporter tout :</span>
+    <a href="{% url 'scolarite:export_excel' %}" class="px-5 py-2.5 rounded-md bg-una-dark text-white font-medium">Excel</a>
+    <a href="{% url 'scolarite:export_pdf' %}" class="px-5 py-2.5 rounded-md border border-una-line font-medium">PDF</a>
+    <a href="{% url 'scolarite:export_csv' %}" class="px-5 py-2.5 rounded-md border border-una-line font-medium">CSV</a>
+  </div>
+</div>
+
+<!-- Chiffres clés -->
+<section aria-label="Chiffres clés">
+  <ul class="grid grid-cols-2 lg:grid-cols-4 gap-4">
+    <li class="bg-white border border-una-line rounded-lg p-5">
+      <p class="text-xs text-una-mute">Déclarations reçues</p>
+      <p class="text-3xl font-medium mt-2">{{ chiffres.total }}</p>
+      <p class="text-xs text-una-mute mt-2">dont {{ chiffres.aujourdhui }} aujourd'hui</p>
+    </li>
+    <li class="bg-white border border-una-line rounded-lg p-5">
+      <p class="text-xs text-una-mute">Places confirmées</p>
+      <p class="text-3xl font-medium mt-2 text-una-mid">{{ chiffres.confirmations }}</p>
+      <p class="text-xs text-una-mute mt-2">candidats qui restent</p>
+    </li>
+    <li class="bg-white border border-una-line rounded-lg p-5">
+      <p class="text-xs text-una-mute">Démissions</p>
+      <p class="text-3xl font-medium mt-2 text-[#b3392b]">{{ chiffres.demissions }}</p>
+      <p class="text-xs text-una-mute mt-2">places à réattribuer</p>
+    </li>
+    <li class="bg-white border border-una-line rounded-lg p-5">
+      <p class="text-xs text-una-mute">Boursiers</p>
+      <p class="text-3xl font-medium mt-2">{{ chiffres.boursiers }}</p>
+      <p class="text-xs text-una-mute mt-2">{{ chiffres.handicap }} en situation de handicap</p>
+    </li>
+  </ul>
+</section>
+
+<div class="grid lg:grid-cols-3 gap-6 mt-6">
+
+  <!-- Répartition par école -->
+  <section class="lg:col-span-2 bg-white border border-una-line rounded-lg p-6">
+    <h2 class="font-medium text-lg">Répartition par école</h2>
+    <p class="text-xs text-una-mute mt-1 mb-6">Nombre de déclarations, confirmations et démissions comprises.</p>
+    <ul class="space-y-4">
+      {% for e in par_ecole %}
+      <li>
+        <div class="flex justify-between items-baseline gap-4 text-sm">
+          <span><strong class="font-medium">{{ e.code }}</strong> <span class="text-xs text-una-mute hidden sm:inline">{{ e.nom }}</span></span>
+          <span class="whitespace-nowrap">{{ e.total }}</span>
+        </div>
+        <div class="h-1.5 bg-una-band rounded-full mt-2"><div class="h-full bg-una-mid rounded-full" style="width: {{ e.largeur }}%"></div></div>
+        <p class="text-xs text-una-mute mt-1.5">{{ e.confirmations }} confirmation{{ e.confirmations|pluralize }} · {{ e.demissions }} démission{{ e.demissions|pluralize }}</p>
+      </li>
+      {% endfor %}
+    </ul>
+  </section>
+
+  <!-- Répartition par financement -->
+  <section class="bg-white border border-una-line rounded-lg p-6 self-start">
+    <h2 class="font-medium text-lg">Financement</h2>
+    <p class="text-xs text-una-mute mt-1 mb-6">Intention déclarée par les candidats.</p>
+    <ul class="space-y-5">
+      {% for f in par_financement %}
+      <li>
+        <div class="flex justify-between text-sm"><span>{{ f.libelle }}</span><span>{{ f.total }}</span></div>
+        <div class="h-1.5 bg-una-band rounded-full mt-2"><div class="h-full bg-una-dark rounded-full" style="width: {{ f.pourcentage }}%"></div></div>
+        <p class="text-xs text-una-mute mt-1.5">{{ f.pourcentage }} %</p>
+      </li>
+      {% endfor %}
+    </ul>
+  </section>
+</div>
+
+<!-- Dernières déclarations -->
+<section class="bg-white border border-una-line rounded-lg mt-6">
+  <div class="flex items-center justify-between px-6 py-5 border-b border-una-line">
+    <h2 class="font-medium text-lg">Dernières déclarations</h2>
+    <a href="{% url 'scolarite:liste' %}" class="text-sm underline underline-offset-4 text-una-mute">Tout voir</a>
+  </div>
+  {% if dernieres %}
+  <div class="overflow-x-auto">
+    <table class="w-full text-sm text-left">
+      <thead class="text-xs text-una-mute">
+        <tr>
+          <th class="px-6 py-3 font-medium">Candidat</th>
+          <th class="px-3 py-3 font-medium">École</th>
+          <th class="px-3 py-3 font-medium">Décision</th>
+          <th class="px-6 py-3 font-medium hidden sm:table-cell">Reçue le</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for c in dernieres %}
+        <tr class="border-t border-una-line">
+          <td class="px-6 py-3.5"><span class="font-medium">{{ c.nom }}</span> {{ c.prenoms }}<span class="block text-xs text-una-mute">NPI {{ c.npi }}</span></td>
+          <td class="px-3 py-3.5">{{ c.ecole }}</td>
+          <td class="px-3 py-3.5">
+            {% if c.decision == 'confirmer' %}
+            <span class="inline-block text-xs bg-una-band border border-una-line rounded px-2.5 py-1">Confirmée</span>
+            {% else %}
+            <span class="inline-block text-xs border border-[#b3392b] text-[#b3392b] rounded px-2.5 py-1">Démission</span>
+            {% endif %}
+          </td>
+          <td class="px-6 py-3.5 text-una-mute hidden sm:table-cell whitespace-nowrap">{{ c.cree_le|date:"d/m/Y H:i" }}</td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+  {% else %}
+  <p class="px-6 py-10 text-sm text-una-mute text-center">Aucune déclaration pour le moment.</p>
+  {% endif %}
+</section>
+
+{% endblock %}

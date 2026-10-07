@@ -1,0 +1,82 @@
+{% extends 'scolarite/base_chef.html' %}
+{% block title %}Déclarations{% endblock %}
+{% block content %}
+
+<div class="mb-8">
+  <p class="text-xs text-una-mute mb-3">Confirmation de choix &nbsp;|&nbsp; {{ annee_academique }}</p>
+  <h1 class="text-3xl md:text-4xl font-medium tracking-tight">Déclarations</h1>
+</div>
+
+<!-- Recherche et filtres -->
+<form method="get" class="bg-white border border-una-line rounded-lg p-5 mb-6">
+  {% include 'scolarite/_champs_filtres.html' %}
+  <div class="flex items-center gap-4 mt-5">
+    <button type="submit" class="bg-una-dark text-white text-sm font-medium rounded-md px-6 py-3">Filtrer</button>
+    {% if filtres_actifs %}<a href="{% url 'scolarite:liste' %}" class="text-sm underline underline-offset-4 text-una-mute">Réinitialiser</a>{% endif %}
+  </div>
+</form>
+
+<!-- Résultats -->
+<section class="bg-white border border-una-line rounded-lg">
+  <div class="flex flex-wrap items-center justify-between gap-2 px-6 py-5 border-b border-una-line">
+    <h2 class="font-medium text-lg">{{ page_obj.paginator.count }} déclaration{{ page_obj.paginator.count|pluralize }}</h2>
+    <div class="flex items-center gap-4 text-sm">
+      <span class="text-xs text-una-mute">{% if filtres_actifs %}Exporter ces résultats :{% else %}Exporter :{% endif %}</span>
+      <a href="{% url 'scolarite:export_excel' %}?{{ querystring }}" class="underline underline-offset-4">Excel</a>
+      <a href="{% url 'scolarite:export_pdf' %}?{{ querystring }}" class="underline underline-offset-4">PDF</a>
+      <a href="{% url 'scolarite:export_csv' %}?{{ querystring }}" class="underline underline-offset-4">CSV</a>
+    </div>
+  </div>
+
+  {% if page_obj %}
+  <div class="overflow-x-auto">
+    <table class="w-full text-sm text-left">
+      <thead class="text-xs text-una-mute">
+        <tr>
+          <th class="px-6 py-3 font-medium">Candidat</th>
+          <th class="px-3 py-3 font-medium">École</th>
+          <th class="px-3 py-3 font-medium">Décision</th>
+          <th class="px-3 py-3 font-medium hidden md:table-cell">Financement</th>
+          <th class="px-3 py-3 font-medium hidden lg:table-cell">Téléphone</th>
+          <th class="px-6 py-3 font-medium hidden sm:table-cell">Reçue le</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for c in page_obj %}
+        <tr class="border-t border-una-line">
+          <td class="px-6 py-3.5"><span class="font-medium">{{ c.nom }}</span> {{ c.prenoms }}<span class="block text-xs text-una-mute">NPI {{ c.npi }}</span></td>
+          <td class="px-3 py-3.5">{{ c.ecole }}</td>
+          <td class="px-3 py-3.5">
+            {% if c.decision == 'confirmer' %}
+            <span class="inline-block text-xs bg-una-band border border-una-line rounded px-2.5 py-1">Confirmée</span>
+            {% else %}
+            <span class="inline-block text-xs border border-[#b3392b] text-[#b3392b] rounded px-2.5 py-1">Démission</span>
+            {% endif %}
+          </td>
+          <td class="px-3 py-3.5 hidden md:table-cell">{{ c.get_financement_display }}</td>
+          <td class="px-3 py-3.5 hidden lg:table-cell whitespace-nowrap">{{ c.telephone }}</td>
+          <td class="px-6 py-3.5 text-una-mute hidden sm:table-cell whitespace-nowrap">{{ c.cree_le|date:"d/m/Y H:i" }}</td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+
+  {% if page_obj.paginator.num_pages > 1 %}
+  <nav class="flex items-center justify-between gap-4 px-6 py-4 border-t border-una-line text-sm" aria-label="Pagination">
+    {% if page_obj.has_previous %}
+    <a href="?{{ querystring }}page={{ page_obj.previous_page_number }}" class="px-5 py-2.5 rounded-md border border-una-line font-medium">Précédent</a>
+    {% else %}<span></span>{% endif %}
+    <span class="text-xs text-una-mute">Page {{ page_obj.number }} sur {{ page_obj.paginator.num_pages }}</span>
+    {% if page_obj.has_next %}
+    <a href="?{{ querystring }}page={{ page_obj.next_page_number }}" class="px-5 py-2.5 rounded-md border border-una-line font-medium">Suivant</a>
+    {% else %}<span></span>{% endif %}
+  </nav>
+  {% endif %}
+
+  {% else %}
+  <p class="px-6 py-12 text-sm text-una-mute text-center">Aucune déclaration ne correspond à votre recherche.</p>
+  {% endif %}
+</section>
+
+{% endblock %}
