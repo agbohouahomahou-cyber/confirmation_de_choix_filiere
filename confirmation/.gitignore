@@ -9,3 +9,6 @@ env/
 
 #Logs
 .logs
+
+
+node_modules/
