@@ -129,15 +129,6 @@ STORAGES = {
     "default": {"BACKEND": "django.core.files.storage.FileSystemStorage"},
     "staticfiles": {"BACKEND": "whitenoise.storage.CompressedManifestStaticFilesStorage"},
 }
-# Email
-# https://docs.djangoproject.com/en/6.1/topics/email/#topic-email-configuration
-
-MAILERS = {
-    'default': {
-        'BACKEND': 'django.core.mail.backends.console.EmailBackend',
-    },
-}
-
 LOGIN_URL = "scolarite:connexion"
 LOGIN_REDIRECT_URL = "scolarite:tableau_de_bord" 
 LOGOUT_REDIRECT_URL = "declaration:accueil"

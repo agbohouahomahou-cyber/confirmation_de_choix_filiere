@@ -54,9 +54,9 @@
       </section>
 
       <!-- Vérification : code + vrai QR code -->
-      <section class="flex items-center gap-6 rounded-xl border border-una-line p-5 break-inside-avoid">
-        <div class="w-28 h-28 shrink-0 [&>svg]:w-full [&>svg]:h-full">{% qr_svg lien_verification scale=6 %}</div>
-        <div class="min-w-0">
+      <section class="flex flex-col sm:flex-row items-center gap-4 sm:gap-6 rounded-xl border border-una-line p-4 sm:p-5 break-inside-avoid">
+        <div class="w-28 h-28 shrink-0 [&>svg]:block [&>svg]:w-full [&>svg]:h-full">{% qr_svg lien_verification scale=6 %}</div>
+        <div class="w-full min-w-0 text-center sm:text-left">
           <p class="text-xs text-una-mute">Code de vérification</p>
           <p class="font-display text-2xl tracking-widest text-una-dark mt-1">{{ c.code_verification }}</p>
           <p class="text-xs text-una-mute mt-3">Scannez le QR code ou ouvrez le lien pour vérifier l'authenticité de cette fiche.</p>
